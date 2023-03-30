@@ -20,3 +20,4 @@ model Peserta {
   jenis_lomba String
   link_pembayaran String
 }
+
