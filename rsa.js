@@ -38,19 +38,19 @@
   };
 
   // generate key pair
-  const generateKeyPair = async () => {
-    let p = await generatePrime(100, 1000);
-    let q = await generatePrime(1000, 10000);
-    let n = p * q;
-    let phi = (p - 1) * (q - 1);
-    let e = 3; // bilangan e harus relatif prima dengan phi
-    while (phi % e == 0) e++;
-    let d = await modInverse(e, phi);
-    return {
-      publicKey: { n, e },
-      privateKey: { n, d },
+    const generateKeyPair = async () => {
+      let p = await generatePrime(100, 1000);
+      let q = await generatePrime(1000, 10000);
+      let n = p * q;
+      let phi = (p - 1) * (q - 1);
+      let e = 3; // bilangan e harus relatif prima dengan phi
+      while (phi % e == 0) e++;
+      let d = await modInverse(e, phi);
+      return {
+        publicKey: { n, e },
+        privateKey: { n, d },
+      };
     };
-  };
 
   // enkripsi pesan
   const encrypt = async (plaintext, publicKey) => {
@@ -95,3 +95,16 @@
   };
 
   export default { encrypt, decrypt, toBase64, fromBase64 };
+
+  const test = async () => {
+    let plaintext = 'H';
+  let publicKey, privateKey;
+
+  let pubkey = JSON.parse(fs.readFileSync('publicKey.json'));
+  pubkey = JSON.parse(await fromBase64(pubkey));
+
+  console.log(pubkey);
+
+  let ciphertext = await encrypt(plaintext, pubkey);
+  console.log(ciphertext);
+  }
